@@ -22,14 +22,17 @@ Prepare database configuration file:
 
      _java -jar dbClient-jar-with-dependencies.jar -c config.json -s "select * from employee"_
 
+
 Result:
 ```
 [{"id":1,"employee_name":"John Smith","salary":5000.0},{"id":2,"employee_name":"Mambo Jumbo","salary":9000.0}]
 ```
 
+
 * To prettify output add option _-p_
 
      _java -jar dbClient-jar-with-dependencies.jar -c config.json -s "select * from employee" -p_
+
 ```
 [ {
   "id" : 1,
