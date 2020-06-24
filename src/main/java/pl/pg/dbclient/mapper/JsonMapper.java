@@ -8,6 +8,7 @@ import pl.pg.dbclient.exception.CannotWriteValueException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class JsonMapper {
 
@@ -28,6 +29,14 @@ public class JsonMapper {
     public static <T> T readValue(File file, Class<T> clazz) {
         try {
             return MAPPER.readValue(file, clazz);
+        } catch (IOException e) {
+            throw new CannotReadFileException(e);
+        }
+    }
+
+    public static <T> List<T> readToList(File file, Class<T> clazz) {
+        try {
+            return MAPPER.readValue(file, MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
         } catch (IOException e) {
             throw new CannotReadFileException(e);
         }

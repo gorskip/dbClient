@@ -1,0 +1,17 @@
+[
+  {
+    "name": "company database",
+    "driverClassName": "org.postgresql.Driver",
+    "url": "jdbc:postgresql://localhost:5432/company",
+    "username": "admin",
+    "password": "postgres"
+  },
+  {
+    "name": "company database2",
+    "driverClassName": "org.postgresql.Driver",
+    "url": "jdbc:postgresql://localhost:5432/company2",
+    "username": "admin2",
+    "password": "postgres2"
+  }
+
+]
