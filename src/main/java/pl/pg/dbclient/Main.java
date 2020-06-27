@@ -3,7 +3,8 @@ package pl.pg.dbclient;
 import org.apache.commons.cli.CommandLine;
 import pl.pg.dbclient.cmd.Cmd;
 import pl.pg.dbclient.config.DbConfig;
-import pl.pg.dbclient.mapper.JsonMapper;
+import pl.pg.dbclient.config.DbConfigFinder;
+import pl.pg.dbclient.mapper.Mapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +16,17 @@ public class Main {
         CommandLine cmd = Cmd.build(args);
 
         if(cmd.hasOption("p")) {
-            JsonMapper.prettify();
+            Mapper.prettify();
         }
 
         File configFile = new File(cmd.getOptionValue("c"));
+        String configName = cmd.getOptionValue("n");
         String sql = cmd.getOptionValue("s");
 
-        DbConfig dbConfig = JsonMapper.readValue(configFile, DbConfig.class);
-        String output = JsonMapper.toString(new DbClient(dbConfig).query(sql));
+
+        DbConfig dbConfig = new DbConfigFinder(configFile).find(configName);
+
+        String output = new DbClient(dbConfig).query(sql).asString();
 
         System.out.println(output);
     }

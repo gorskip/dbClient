@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class JsonMapper {
+public class Mapper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

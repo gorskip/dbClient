@@ -1,7 +1,7 @@
 package pl.pg.dbclient.config;
 
 import pl.pg.dbclient.exception.DbConfigException;
-import pl.pg.dbclient.mapper.JsonMapper;
+import pl.pg.dbclient.mapper.Mapper;
 
 import java.io.File;
 import java.util.List;
@@ -16,7 +16,7 @@ public class DbConfigFinder {
     }
 
     public DbConfig find(String name) {
-        List<DbConfig> dbConfigs = JsonMapper.readToList(configFile, DbConfig.class);
+        List<DbConfig> dbConfigs = Mapper.readToList(configFile, DbConfig.class);
         List<DbConfig> foundDbConfigs = dbConfigs.stream()
                 .filter(dbConfig -> name.equals(dbConfig.getName()))
                 .collect(Collectors.toList());

@@ -28,6 +28,12 @@ public class Cmd {
                 .withDescription("Database configuration JSON file path")
                 .create("c");
 
+        Option configName = OptionBuilder
+                .hasArgs(1)
+                .isRequired()
+                .withDescription("Database configuration name")
+                .create("n");
+
         Option sql = OptionBuilder
                 .hasArgs(1)
                 .isRequired()
@@ -42,6 +48,7 @@ public class Cmd {
 
         options
                 .addOption(config)
+                .addOption(configName)
                 .addOption(sql)
                 .addOption(prettify);
 
