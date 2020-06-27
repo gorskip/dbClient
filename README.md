@@ -6,21 +6,23 @@ Simple command line database client
 2. Run  _mvn install_
 
 ### Configuration
-Prepare database configuration file:
+Prepare database configuration file. It can contain multiple database configurations:
 ```
-{
-  "name": "company database",
-  "driverClassName": "org.postgresql.Driver",
-  "url": "jdbc:postgresql://localhost:5432/company",
-  "username": "postgres",
-  "password": "admin"
-}
+[
+  {
+    "name": "company database",
+    "driverClassName": "org.postgresql.Driver",
+    "url": "jdbc:postgresql://localhost:5432/company",
+    "username": "postgres",
+    "password": "admin"
+  }
+]
 ```
 
 ### Usage
 * You can run dbClient from _target_ folder using:
 
-     _java -jar dbClient-jar-with-dependencies.jar -c config.json -s "select * from employee"_
+     _java -jar dbClient-jar-with-dependencies.jar -c config.json -n "company database" -s "select * from employee"_
 
 
 Result:
@@ -31,7 +33,7 @@ Result:
 
 * To prettify output add option _-p_
 
-     _java -jar dbClient-jar-with-dependencies.jar -c config.json -s "select * from employee" -p_
+     _java -jar dbClient-jar-with-dependencies.jar -c config.json -n "company database" -s "select * from employee" -p_
 
 ```
 [ {
