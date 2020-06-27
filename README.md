@@ -49,7 +49,8 @@ Result:
 
 ### Options
 ```
- -c *       Database configuration JSON file path
+ -c *       Database configurations JSON file path
+ -n *       Database configuration name
  -s *       Sql query
  -p         Prettify output
 ```
