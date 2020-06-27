@@ -9,6 +9,7 @@ import pl.pg.dbclient.exception.CannotWriteValueException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class JsonMapper {
 
@@ -32,6 +33,10 @@ public class JsonMapper {
         } catch (IOException e) {
             throw new CannotReadFileException(e);
         }
+    }
+
+    public static <T> T convert(Map<String, Object> map, Class<T> clazz) {
+        return MAPPER.convertValue(map, clazz);
     }
 
     public static <T> List<T> readToList(File file, Class<T> clazz) {
