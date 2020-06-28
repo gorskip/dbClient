@@ -1,0 +1,9 @@
+[
+  {
+    "name": "company database",
+    "driverClassName": "org.postgresql.Driver",
+    "url": "jdbc:postgresql://localhost:5432/development",
+    "username": "postgres",
+    "password": "secret1234"
+  }
+]

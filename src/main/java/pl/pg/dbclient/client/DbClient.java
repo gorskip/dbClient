@@ -1,26 +1,21 @@
-package pl.pg.dbclient;
+package pl.pg.dbclient.client;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import pl.pg.dbclient.annotation.RecordMapper;
 import pl.pg.dbclient.config.DbConfig;
 import pl.pg.dbclient.exception.CannotCloseConnectionException;
-import pl.pg.dbclient.mapper.ColumnMapper;
-import pl.pg.dbclient.mapper.Mapper;
-import pl.pg.dbclient.mapper.RowMapper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DbClient {
 
     private final DbConfig dbConfig;
     private JdbcTemplate jdbcTemplate;
     private List<Map<String, Object>> resultList = new ArrayList<>();
-    private String sql;
+    private Query query;
 
     public DbClient(DbConfig dbConfig) {
         this.dbConfig = dbConfig;
@@ -37,36 +32,25 @@ public class DbClient {
     }
 
     public DbClient query(String sql) {
-       this.sql = sql;
+       this.query = new Query(jdbcTemplate, sql);
        return this;
     }
 
-    private List<Map<String, Object>> queryForList() {
-        return jdbcTemplate.queryForList(sql);
-    }
-
-    private <T> List<T> queryForList(RowMapper<T> rowMapper) {
-        return jdbcTemplate.query(sql, rowMapper);
-    }
-
     public String asString() {
-        return Mapper.toString(jdbcTemplate.queryForList(sql));
+        return query.asString();
     }
 
     public List<Map<String, Object>> asList() {
-        return queryForList();
+        return query.asList();
     }
 
     public <T> List<T> asList(Class<T> clazz) {
-        if(clazz.isAnnotationPresent(RecordMapper.class)) {
-            clazz.getAnnotation(RecordMapper.class).value()
-        }
-        return queryForList().stream()
-                .map(result -> new ColumnMapper<T>().map(result, clazz))
-                .collect(Collectors.toList());
+        return query.asList(clazz);
     }
 
-
+    public int count() {
+        return query.count();
+    }
 
     public void closeConnection() {
         try {

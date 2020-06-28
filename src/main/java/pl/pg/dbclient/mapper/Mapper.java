@@ -36,7 +36,11 @@ public class Mapper {
     }
 
     public static <T> T convert(Map<String, Object> map, Class<T> clazz) {
-        return MAPPER.convertValue(map, clazz);
+        return convertValue(map, clazz);
+    }
+
+    public static <T> T convertValue(Object fromValue, Class<T> toValueType) {
+        return MAPPER.convertValue(fromValue, toValueType);
     }
 
     public static <T> List<T> readToList(File file, Class<T> clazz) {
