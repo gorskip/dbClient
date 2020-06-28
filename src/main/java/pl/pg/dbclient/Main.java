@@ -1,6 +1,7 @@
 package pl.pg.dbclient;
 
 import org.apache.commons.cli.CommandLine;
+import pl.pg.dbclient.client.DbClient;
 import pl.pg.dbclient.cmd.Cmd;
 import pl.pg.dbclient.config.DbConfig;
 import pl.pg.dbclient.config.DbConfigFinder;
@@ -8,6 +9,7 @@ import pl.pg.dbclient.mapper.Mapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 public class Main {
@@ -19,7 +21,7 @@ public class Main {
             Mapper.prettify();
         }
 
-        File configFile = new File(cmd.getOptionValue("c"));
+        File configFile = Paths.get(cmd.getOptionValue("c")).toFile();
         String configName = cmd.getOptionValue("n");
         String sql = cmd.getOptionValue("s");
 

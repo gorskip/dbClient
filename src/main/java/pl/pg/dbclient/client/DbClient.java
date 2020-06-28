@@ -2,9 +2,12 @@ package pl.pg.dbclient;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import pl.pg.dbclient.annotation.RecordMapper;
 import pl.pg.dbclient.config.DbConfig;
 import pl.pg.dbclient.exception.CannotCloseConnectionException;
+import pl.pg.dbclient.mapper.ColumnMapper;
 import pl.pg.dbclient.mapper.Mapper;
+import pl.pg.dbclient.mapper.RowMapper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ public class DbClient {
     private final DbConfig dbConfig;
     private JdbcTemplate jdbcTemplate;
     private List<Map<String, Object>> resultList = new ArrayList<>();
+    private String sql;
 
     public DbClient(DbConfig dbConfig) {
         this.dbConfig = dbConfig;
@@ -33,23 +37,36 @@ public class DbClient {
     }
 
     public DbClient query(String sql) {
-        this.resultList = jdbcTemplate.queryForList(sql);
-        return this;
+       this.sql = sql;
+       return this;
+    }
+
+    private List<Map<String, Object>> queryForList() {
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    private <T> List<T> queryForList(RowMapper<T> rowMapper) {
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     public String asString() {
-        return Mapper.toString(resultList);
+        return Mapper.toString(jdbcTemplate.queryForList(sql));
     }
 
     public List<Map<String, Object>> asList() {
-        return resultList;
+        return queryForList();
     }
 
     public <T> List<T> asList(Class<T> clazz) {
-        return resultList.stream()
-                .map(result -> Mapper.convert(result, clazz))
+        if(clazz.isAnnotationPresent(RecordMapper.class)) {
+            clazz.getAnnotation(RecordMapper.class).value()
+        }
+        return queryForList().stream()
+                .map(result -> new ColumnMapper<T>().map(result, clazz))
                 .collect(Collectors.toList());
     }
+
+
 
     public void closeConnection() {
         try {
@@ -58,5 +75,4 @@ public class DbClient {
             throw new CannotCloseConnectionException(e);
         }
     }
-
 }
